@@ -1,0 +1,65 @@
+
+name: Web CI/CD in Git
+#What to trigger this action
+on: push
+
+jobs:
+  #job var which you can use in the above step
+  build-node-express:
+    # Name of the step
+    name: Run mock tests
+    # Which OS we gonna use
+    runs-on: windows-latest
+    #Steps to execute
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install the npm pack in Client directory
+        working-directory: ./Client
+        run: npm install
+
+      - name: Install the npm pack in mock-server directory
+        working-directory: ./TA/mock/mock-server
+        run: npm install
+
+      - uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: "123.0"
+
+      - name: Install the npm-all
+        run: npm install npm-run-all
+
+      - name: Install the npm-parallel
+        run: npm install -g parallel
+      
+      - name: Install .Net
+        uses: actions/setup-dotnet@v3
+
+      - name: Setup MSBuild Path
+        uses: microsoft/setup-msbuild@v1
+
+      - name: Setup Nuget
+        uses: Nuget/setup-nuget@v1.0.5
+
+      - name: Restore nuget packages
+        run: nuget restore .\TA\mock\Tests\TestAutomation.sln
+
+      - name: Build
+        run:  msbuild.exe .\TA\mock\Tests\TestAutomation.sln
+
+      - name: Add VSTest.console.exe to the PATH
+        uses: darenm/Setup-VSTest@v1
+
+      - name: Run mock Tests
+        uses: BerniWittmann/background-server-action@v1
+        with:
+          command: vstest.console.exe "TA\mock\Tests\TestAutomation\bin\Debug\net8.0\TestAutomation.dll"
+          start: npm run start-servers
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v2
+        # if: failure() 
+        with:
+          name: test-results
+          path: ./TA/mock/Tests/Screenshots 

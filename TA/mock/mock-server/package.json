@@ -1,0 +1,11 @@
+{
+  "name": "mock-service",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "node service"
+  },
+  "dependencies": {
+    "json-server": "^0.17.4"
+  }
+}

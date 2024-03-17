@@ -1,7 +1,7 @@
 {
     "name": "automation",
     "scripts": {
-        "start-client-server": "cd <direcotry of web app> && npm start",
+        "start-client-server": "cd ./WebApp && npm start",
         "start-mock-server": "cd ./TA/mock/mock-server && npm start",
         "start-servers": "npm-run-all --parallel start-client-server start-mock-server"
     },

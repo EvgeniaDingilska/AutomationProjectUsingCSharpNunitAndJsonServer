@@ -15,8 +15,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install the npm pack in Client directory
-        working-directory: ./Client
+      - name: Install the npm pack in Web app directory
+        working-directory: ./WebApp
         run: npm install
 
       - name: Install the npm pack in mock-server directory
